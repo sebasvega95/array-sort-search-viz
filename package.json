@@ -1,5 +1,6 @@
 {
   "name": "array-sort-search-viz",
+  "homepage": "http://sebasvega95.github.io/array-sort-search-viz",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -14,14 +15,17 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
+    "@types/d3": "^5.0.0",
     "@types/jest": "^22.1.3",
     "@types/node": "^9.4.6",
     "@types/react": "^16.0.38",
     "@types/react-dom": "^16.0.4",
-    "@types/d3": "^5.0.0",
+    "gh-pages": "^1.1.0",
     "typescript": "^2.7.2"
   }
 }
