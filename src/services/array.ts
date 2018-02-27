@@ -2,12 +2,29 @@ function timeout(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+export enum SortingAlgorithm {
+  quicksort,
+  heapsort
+}
+
 export async function sortArray(
   array: number[],
+  method: SortingAlgorithm,
   swapInArray: (i: number, j: number) => void,
   callback: () => void
 ) {
-  await quicksort(array, 0, array.length - 1, swapInArray);
+  switch (method) {
+    case SortingAlgorithm.quicksort: {
+      await quicksort(array, 0, array.length - 1, swapInArray);
+      break;
+    }
+    case SortingAlgorithm.heapsort: {
+      await heapsort(array, swapInArray);
+      break;
+    }
+    default:
+      throw new Error('Invalid method');
+  }
   callback();
 }
 
@@ -44,6 +61,48 @@ async function partition(
   swapInArray(i + 1, hi);
   await timeout(1);
   return i + 1;
+}
+
+async function heapify(
+  array: number[],
+  n: number,
+  i: number,
+  swapInArray: (i: number, j: number) => void
+) {
+  let largest = i;
+  const l = 2 * i + 1;
+  const r = 2 * i + 2;
+
+  if (l < n && array[l] > array[largest]) {
+    largest = l;
+  }
+  if (r < n && array[r] > array[largest]) {
+    largest = r;
+  }
+
+  if (largest !== i) {
+    [array[i], array[largest]] = [array[largest], array[i]];
+    swapInArray(i, largest);
+    await timeout(1);
+    await heapify(array, n, largest, swapInArray);
+  }
+}
+
+async function heapsort(
+  array: number[],
+  swapInArray: (i: number, j: number) => void
+) {
+  const n = array.length;
+  for (let i = n / 2 - 1; i >= 0; i--) {
+    await heapify(array, n, i, swapInArray);
+  }
+
+  for (let i = n - 1; i >= 0; i--) {
+    [array[0], array[i]] = [array[i], array[0]];
+    swapInArray(0, i);
+    await timeout(1);
+    await heapify(array, i, 0, swapInArray);
+  }
 }
 
 export async function lookupClosestSequential(
