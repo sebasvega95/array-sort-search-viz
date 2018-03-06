@@ -98,7 +98,7 @@ async function heapsort(
   swapInArray: (i: number, j: number) => void
 ) {
   const n = array.length;
-  for (let i = n / 2 - 1; i >= 0; i--) {
+  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
     await heapify(array, n, i, swapInArray);
   }
 
