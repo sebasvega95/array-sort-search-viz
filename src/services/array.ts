@@ -4,7 +4,8 @@ function timeout(ms: number) {
 
 export enum SortingAlgorithm {
   quicksort,
-  heapsort
+  heapsort,
+  cocktail
 }
 
 export async function sortArray(
@@ -20,6 +21,10 @@ export async function sortArray(
     }
     case SortingAlgorithm.heapsort: {
       await heapsort(array, swapInArray);
+      break;
+    }
+    case SortingAlgorithm.cocktail: {
+      await cocktailSort(array, swapInArray);
       break;
     }
     default:
@@ -127,6 +132,41 @@ export async function lookupClosestSequential(
     }
   }
   callback(index);
+}
+
+async function cocktailSort(
+  array: number[],
+  swapInArray: (i: number, j: number) => void
+) {
+  let swapped = true;
+  let start = 0;
+  let end = array.length - 1;
+
+  while (swapped) {
+    swapped = false;
+    for (let i = start; i < end; ++i) {
+      if (array[i] > array[i + 1]) {
+        // swap(a[i], a[i+1]);
+        [array[i], array[i + 1]] = [array[i + 1], array[i]];
+        swapInArray(i, i + 1);
+        await timeout(1);
+        swapped = true;
+      }
+    }
+    if (!swapped) break;
+    swapped = false;
+    end--;
+    for (let i = end - 1; i >= start; --i) {
+      if (array[i] > array[i + 1]) {
+        // swap(a[i], a[i+1]);
+        [array[i], array[i + 1]] = [array[i + 1], array[i]];
+        swapInArray(i, i + 1);
+        await timeout(1);
+        swapped = true;
+      }
+    }
+    start++;
+  }
 }
 
 export async function lookupClosestBinary(

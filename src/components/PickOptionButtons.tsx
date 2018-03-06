@@ -16,15 +16,10 @@ class PickOptionsButton extends React.Component<Props> {
         <p>{question}</p>
         <Button.Group>
           {options.map((opt, i) => (
-            <>
-              <Button
-                key={`pick-${optionsNames[i]}`}
-                onClick={() => callback(opt)}
-              >
-                {optionsNames[i]}
-              </Button>
+            <React.Fragment key={`pick-${optionsNames[i]}`}>
+              <Button onClick={() => callback(opt)}>{optionsNames[i]}</Button>
               {i < options.length - 1 ? <Button.Or /> : null}
-            </>
+            </React.Fragment>
           ))}
         </Button.Group>
       </Segment>

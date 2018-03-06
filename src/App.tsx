@@ -26,7 +26,8 @@ class App extends React.Component<Props, State> {
   }
 
   createArray(size: number) {
-    const array = new Array(size).fill(0);
+    let array = new Array(size).fill(0);
+    array = array.map(() => Math.floor(Math.random() * 1000));
     this.setState({ array });
   }
 

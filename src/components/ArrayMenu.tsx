@@ -33,20 +33,19 @@ interface State {
   menuAction: MenuAction;
   valueToLookUp: number;
   lookupResultIndex: number;
-  filled: boolean;
   sorted: boolean;
 }
 
 const SORTING_ALGORITHMS = [
   SortingAlgorithm.quicksort,
-  SortingAlgorithm.heapsort
+  SortingAlgorithm.heapsort,
+  SortingAlgorithm.cocktail
 ];
-const SORTING_ALGORITHMS_NAMES = ['Quicksort', 'Heapsort'];
+const SORTING_ALGORITHMS_NAMES = ['Quicksort', 'Heapsort', 'Cocktail sort'];
 
 class ArrayMenu extends React.Component<Props, State> {
   state = {
     menuAction: MenuAction.Nothing,
-    filled: false,
     sorted: false,
     valueToLookUp: 0,
     lookupResultIndex: 0
@@ -68,14 +67,13 @@ class ArrayMenu extends React.Component<Props, State> {
     createArray(size);
     this.setState({
       menuAction: MenuAction.Nothing,
-      filled: false,
       sorted: false
     });
   }
 
   fillingArray() {
     const { fillArrayRandomly, unhighlightIndices } = this.props;
-    this.setState({ filled: true, sorted: false });
+    this.setState({ sorted: false });
     unhighlightIndices();
     fillArrayRandomly();
   }
@@ -133,7 +131,7 @@ class ArrayMenu extends React.Component<Props, State> {
         underMenu = (
           <GetNumericalue
             question="Enter the size of the array"
-            bounds={[1, 500]}
+            bounds={[1, 300]}
             handleSubmit={this.setArraySize}
           />
         );
@@ -175,7 +173,7 @@ class ArrayMenu extends React.Component<Props, State> {
 
   render() {
     const { array } = this.props;
-    const { menuAction, filled, sorted } = this.state;
+    const { menuAction, sorted } = this.state;
 
     return (
       <>
@@ -194,10 +192,7 @@ class ArrayMenu extends React.Component<Props, State> {
           </Button>
           <Button
             disabled={
-              menuAction !== MenuAction.Nothing ||
-              array.length === 0 ||
-              !filled ||
-              sorted
+              menuAction !== MenuAction.Nothing || array.length === 0 || sorted
             }
             onClick={() =>
               this.setState({ menuAction: MenuAction.PickingSortingAlgorithm })
@@ -206,9 +201,7 @@ class ArrayMenu extends React.Component<Props, State> {
             Sort array
           </Button>
           <Button
-            disabled={
-              menuAction !== MenuAction.Nothing || array.length === 0 || !filled
-            }
+            disabled={menuAction !== MenuAction.Nothing || array.length === 0}
             onClick={this.gettingValueToLookup}
           >
             Look up closest value in array

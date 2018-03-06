@@ -24,7 +24,7 @@ class GetNumericValue extends React.Component<Props, State> {
 
   validSize(size: string) {
     const { bounds } = this.props;
-    const isNum = /^[0-9]+$/.test(size);
+    const isNum = /^(0|([1-9][0-9]*))$/.test(size);
     const [lowerBound, upperBound] = bounds;
     const inRange = lowerBound <= +size && +size <= upperBound;
     return isNum && inRange;
@@ -46,7 +46,8 @@ class GetNumericValue extends React.Component<Props, State> {
 
   render() {
     const { size } = this.state;
-    const { question, handleSubmit } = this.props;
+    const { bounds, question, handleSubmit } = this.props;
+    const [lowerBound, upperBound] = bounds;
 
     const inputButton = (
       <Button disabled={size === ''} onClick={() => handleSubmit(+size)}>
@@ -56,7 +57,7 @@ class GetNumericValue extends React.Component<Props, State> {
 
     return (
       <Segment>
-        <p>{question}</p>
+        <p>{`${question} (between ${lowerBound} and ${upperBound})`}</p>
         <Input
           ref={input => {
             if (input) input.focus();
